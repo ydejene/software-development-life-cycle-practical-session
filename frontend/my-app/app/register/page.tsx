@@ -75,3 +75,15 @@ export default function RegisterPage() {
                   onChange={(e) => setFormData({ ...formData, full_name: e.target.value })}
                 />
               </div>
+
+              <div className="space-y-2">
+                <label className="text-xs font-semibold text-slate-400 uppercase tracking-wider ml-1">Email Address</label>
+                <input
+                  type="email"
+                  required
+                  placeholder="abebe@example.com"
+                  className="w-full bg-slate-800/50 border border-white/5 rounded-xl px-4 py-3 outline-none focus:ring-2 focus:ring-blue-500/50 transition-all placeholder:text-slate-600"
+                  value={formData.email}
+                  onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                />
+              </div>
