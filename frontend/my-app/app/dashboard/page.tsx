@@ -124,3 +124,81 @@ export default function DashboardPage() {
             {error}
           </div>
         )}
+
+        {data && (
+          <>
+            <div className="grid grid-cols-2 lg:grid-cols-3 gap-4 mb-8">
+              <StatCard
+                label="Monthly Recurring Revenue"
+                value={formatETB(data.mrr)}
+                sublabel="This calendar month"
+                accent="border-blue-200"
+              />
+              <StatCard
+                label="Total Revenue"
+                value={formatETB(data.total_revenue)}
+                sublabel="All time"
+              />
+              <StatCard
+                label="Active Memberships"
+                value={data.active_memberships.toString()}
+                sublabel={`${data.expiring_soon} expiring within 7 days`}
+              />
+              <StatCard
+                label="Overdue Payments"
+                value={data.overdue_count.toString()}
+                sublabel={formatETB(data.overdue_amount) + ' outstanding'}
+                accent={data.overdue_count > 0 ? 'border-red-200' : 'border-gray-200'}
+              />
+              <StatCard
+                label="Expiring Soon"
+                value={data.expiring_soon.toString()}
+                sublabel="Next 7 days"
+                accent={data.expiring_soon > 0 ? 'border-yellow-200' : 'border-gray-200'}
+              />
+            </div>
+
+            <div className="bg-white rounded-xl border border-gray-200">
+              <div className="px-5 py-4 border-b border-gray-100">
+                <h2 className="text-sm font-semibold text-gray-800">Recent Payments</h2>
+              </div>
+              <div className="overflow-x-auto">
+                <table className="w-full text-sm">
+                  <thead>
+                    <tr className="bg-gray-50 border-b border-gray-100">
+                      <th className="text-left px-5 py-3 text-xs font-medium text-gray-500 uppercase">Member</th>
+                      <th className="text-left px-5 py-3 text-xs font-medium text-gray-500 uppercase">Amount</th>
+                      <th className="text-left px-5 py-3 text-xs font-medium text-gray-500 uppercase">Method</th>
+                      <th className="text-left px-5 py-3 text-xs font-medium text-gray-500 uppercase">Status</th>
+                      <th className="text-left px-5 py-3 text-xs font-medium text-gray-500 uppercase">Date</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-gray-50">
+                    {data.recent_payments.map((p) => (
+                      <tr key={p.payment_id} className="hover:bg-gray-50 transition-colors">
+                        <td className="px-5 py-3 font-medium text-gray-800">{p.full_name}</td>
+                        <td className="px-5 py-3 text-gray-700">{formatETB(p.amount)}</td>
+                        <td className="px-5 py-3"><PaymentMethodBadge method={p.payment_method} /></td>
+                        <td className="px-5 py-3"><StatusBadge status={p.status} /></td>
+                        <td className="px-5 py-3 text-gray-500">
+                          {new Date(p.paid_at).toLocaleDateString('en-ET')}
+                        </td>
+                      </tr>
+                    ))}
+                    {data.recent_payments.length === 0 && (
+                      <tr>
+                        <td colSpan={5} className="px-5 py-8 text-center text-gray-400 text-sm">
+                          No payment records yet
+                        </td>
+                      </tr>
+                    )}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </>
+        )}
+      </main>
+    </div>
+  );
+}
