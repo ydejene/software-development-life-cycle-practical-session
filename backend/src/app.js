@@ -21,3 +21,18 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use(morgan(process.env.NODE_ENV === 'production' ? 'combined' : 'dev'));
+
+app.get('/api/health', (req, res) => {
+  res.status(200).json({
+    success: true,
+    data: {
+      status:      'ok',
+      service:     'FitSync API',
+      version:     '1.0.0',
+      environment: process.env.NODE_ENV || 'development',
+      timestamp:   new Date().toISOString(),
+    },
+    message: 'API is running',
+    errors:  null,
+  });
+});
