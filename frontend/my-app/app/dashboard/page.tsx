@@ -69,3 +69,15 @@ function StatusBadge({ status }: { status: string }) {
     </span>
   );
 }
+
+export default function DashboardPage() {
+  const [data,    setData]    = useState<FinancialData | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error,   setError]   = useState('');
+
+  useEffect(() => {
+    dashboardAPI.getFinancials()
+      .then((res) => setData(res.data.data))
+      .catch(() => setError('Failed to load dashboard data.'))
+      .finally(() => setLoading(false));
+  }, []);
