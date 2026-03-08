@@ -161,3 +161,5 @@ const getMemberById = async (req, res, next) => {
     next(err);
   }
 };
+
+module.exports = { getAllMembers, getMemberById };
