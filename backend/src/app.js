@@ -50,3 +50,11 @@ app.use((req, res) => {
     errors:  null,
   });
 });
+
+app.use(errorHandler);
+
+app.listen(PORT, () => {
+  console.log(`[Server] FitSync API running on port ${PORT} in ${process.env.NODE_ENV || 'development'} mode`);
+});
+
+module.exports = app;
