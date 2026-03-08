@@ -242,3 +242,30 @@ CREATE INDEX idx_audit_created_at ON audit_log (created_at);
 COMMENT ON TABLE audit_log IS 'Write-only forensic trail. Never update or delete rows. Application layer enforces this.';
 COMMENT ON COLUMN audit_log.old_value IS 'JSONB snapshot of the record state before the action.';
 COMMENT ON COLUMN audit_log.new_value IS 'JSONB snapshot of the record state after the action.';
+
+-- =============================================================================
+-- SEED DATA (development only)
+-- =============================================================================
+
+INSERT INTO users (full_name, email, password_hash, phone, role, status) VALUES
+    ('Gym Owner',  'owner@fitsync.dev',  '$2b$12$LQv3c1yqBWVHxkd0LHAkCOYz6TtxMlJbekRSm6lGxMJhCKhpX0c9i', '+251900000001', 'owner',  'active'),
+    ('Staff User', 'staff@fitsync.dev',  '$2b$12$LQv3c1yqBWVHxkd0LHAkCOYz6TtxMlJbekRSm6lGxMJhCKhpX0c9i', '+251900000002', 'staff',  'active'),
+    ('Test Member','member@fitsync.dev', '$2b$12$LQv3c1yqBWVHxkd0LHAkCOYz6TtxMlJbekRSm6lGxMJhCKhpX0c9i', '+251900000003', 'member', 'active');
+
+INSERT INTO plans (name, description, price, billing_cycle, duration_days, max_classes_per_month, includes_locker) VALUES
+    ('Basic Monthly',    'Gym floor access only',             1500.00, 'monthly',   30,  NULL,  FALSE),
+    ('Standard Monthly', 'Gym + unlimited class bookings',    2500.00, 'monthly',   30,  NULL,  FALSE),
+    ('Premium Monthly',  'Gym + classes + locker',            3500.00, 'monthly',   30,  NULL,  TRUE),
+    ('Quarterly',        'Standard plan billed quarterly',    6500.00, 'quarterly', 90,  NULL,  FALSE),
+    ('Annual',           'Best value - full year access',    22000.00, 'annual',   365,  NULL,  TRUE);
+
+INSERT INTO memberships (user_id, plan_id, start_date, end_date, status, enrolled_by) VALUES
+    (3, 2, CURRENT_DATE, CURRENT_DATE + INTERVAL '30 days', 'active', 1);
+
+INSERT INTO payments (membership_id, user_id, amount, currency, payment_method, status, reference_number, recorded_by) VALUES
+    (1, 3, 2500.00, 'ETB', 'cash', 'completed', NULL, 1);
+
+INSERT INTO events_classes (title, event_type, instructor_id, start_datetime, end_datetime, location, max_capacity) VALUES
+    ('Morning HIIT',    'class', 2, NOW() + INTERVAL '1 day',  NOW() + INTERVAL '1 day'  + INTERVAL '1 hour', 'Main Floor', 20),
+    ('Yoga Flow',       'class', 2, NOW() + INTERVAL '2 days', NOW() + INTERVAL '2 days' + INTERVAL '1 hour', 'Studio A',   15),
+    ('CrossFit WOD',    'class', 2, NOW() + INTERVAL '3 days', NOW() + INTERVAL '3 days' + INTERVAL '1 hour', 'Main Floor', 12);
