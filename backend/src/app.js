@@ -36,3 +36,17 @@ app.get('/api/health', (req, res) => {
     errors:  null,
   });
 });
+
+app.use('/api/auth',      authRoutes);
+app.use('/api/members',   memberRoutes);
+app.use('/api/dashboard', dashboardRoutes);
+
+// ---- 404 handler for undefined routes ----
+app.use((req, res) => {
+  res.status(404).json({
+    success: false,
+    data:    null,
+    message: `Route not found: ${req.method} ${req.path}`,
+    errors:  null,
+  });
+});
