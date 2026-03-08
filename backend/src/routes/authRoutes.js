@@ -25,4 +25,14 @@ const registerValidation = [
     .isMobilePhone().withMessage('Must be a valid phone number'),
 ];
 
+const loginValidation = [
+  body('email')
+    .trim()
+    .notEmpty().withMessage('Email is required')
+    .isEmail().withMessage('Must be a valid email address')
+    .normalizeEmail(),
+  body('password')
+    .notEmpty().withMessage('Password is required'),
+];
+
 module.exports = router;
